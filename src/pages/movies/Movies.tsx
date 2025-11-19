@@ -12,13 +12,17 @@ interface Movie {
 }
 
 function Movies(){
-    const [Movies, setMovies] = useState<Movie[]>([])
+    const [movies, setMovies] = useState<Movie[]>([])
+    const [loading, setLoading] = useState<boolean>(true) // consitional rendering
 
     const fetchMovies = useCallback(async() => {
+        setLoading(true) // redering loading
         const response = await ApiClient.get("/movie")
-
+        console.log(response.data.data);
+        
         if(response.status == 200){
             setMovies(response.data.data)
+            setLoading(false) // selesai loading
         }
 
     }, [])
@@ -27,10 +31,50 @@ function Movies(){
         fetchMovies()
     }, [fetchMovies])
 
+    const handledelete = async(movieId : String) => {
+        const response = await ApiClient.delete(`/movie/${movieId}`)
+
+        if(response.status == 201){
+            fetchMovies()
+        }
+    }
+
+
     return <div className="container mx-auto">
         <div className="d-flex justify-content-between mb-3">
             <h2>Movie Page</h2>
             <NavLink to="/add-movie" className= "btn btn-primary">add-movie</NavLink>
+            
+        </div>
+        <div>
+            <table className="table table-dark">
+                <thead className="bg-dark">
+                    <th>No</th>
+                    <th>judul</th>
+                    <th>Tahun Rilis</th>
+                    <th>Sutradara</th>
+                    <th>aksi</th>
+                </thead>
+                <tbody>
+                    {
+                        loading && <tr>
+                            <td colSpan={5} className="text-center">Loading...</td>
+                        </tr>
+                    }
+                    {
+                        movies.length > 0 && movies.map((movie, index) => {
+                            return <tr key={movie._id}>
+                                <td>{index + 1}</td>
+                                <td>{movie.judul}</td>
+                                <td>{movie.tahunRilis}</td>
+                                <td>{movie.sutradara}</td>
+                                <td><button className="btn btn-danger" onClick={() => handledelete(movie._id)}>delete</button>
+                                </td>
+                            </tr>
+                        })
+                    }
+                </tbody>
+            </table>
         </div>
     </div>
 }
