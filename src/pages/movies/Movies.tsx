@@ -17,7 +17,7 @@ function Movies(){
 
     const fetchMovies = useCallback(async() => {
         setLoading(true) // redering loading
-        const response = await ApiClient.get("/movie")
+        const response = await ApiClient.get("/movies")
         console.log(response.data.data);
         
         if(response.status == 200){
@@ -32,7 +32,7 @@ function Movies(){
     }, [fetchMovies])
 
     const handledelete = async(movieId : String) => {
-        const response = await ApiClient.delete(`/movie/${movieId}`)
+        const response = await ApiClient.delete(`/movies/${movieId}`)
 
         if(response.status == 201){
             fetchMovies()
@@ -43,7 +43,7 @@ function Movies(){
     return <div className="container mx-auto">
         <div className="d-flex justify-content-between mb-3">
             <h2>Movie Page</h2>
-            <NavLink to="/add-movie" className= "btn btn-primary">add-movie</NavLink>
+            <NavLink to="/list-movies/add-movie" className= "btn btn-primary">add-movie</NavLink>
             
         </div>
         <div>
