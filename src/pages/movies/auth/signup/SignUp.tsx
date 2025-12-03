@@ -1,9 +1,12 @@
 import { useState, type FormEvent } from "react";
-import { Button, Form, NavLink } from "react-bootstrap";
+import { Button, Form} from "react-bootstrap";
 import ApiClient from "../../../../utils/ApiClient";
+import { NavLink } from "react-router";
+
+
 
 interface SignUPForm{
-    username : string, // harus sama dengan name
+    username : string, // harus sama dengan name di form
     email : string,
     password : string
 }
@@ -50,11 +53,14 @@ function SignUp(){
 
                     <Form.Group controlId="formPassword" className="mb-3">
                         <Form.Label>Enter Password</Form.Label>
-                        <Form.Control value={form.password} onChange={handleInputChange} name="password" type="text" placeholder="Password"/>
+                        <Form.Control value={form.password} onChange={handleInputChange} name="password" type="password" placeholder="Password"/>
                     </Form.Group>
                     <Button type="submit" variant="primary">
                         Sign Up
                     </Button>
+                    <Form.Group>
+                        <NavLink to={"/signin"}>sign in</NavLink>
+                    </Form.Group>
                 </Form>
             </div>
         </div>
