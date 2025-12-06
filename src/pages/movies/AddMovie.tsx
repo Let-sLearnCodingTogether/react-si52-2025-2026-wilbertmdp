@@ -27,7 +27,7 @@ function AddMovie(){
     const handleSubmit = async (event : FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         try{
-            const response = await ApiClient.post("/movie", form)
+            const response = await ApiClient.post("/movies", form)
             console.log(response);
         }catch(error){
             console.log(error);

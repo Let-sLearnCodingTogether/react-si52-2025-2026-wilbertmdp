@@ -20,7 +20,7 @@ function Movies(){
         const response = await ApiClient.get("/movies")
         console.log(response.data.data);
         
-        if(response.status == 200){
+        if(response.status == 201){
             setMovies(response.data.data)
             setLoading(false) // selesai loading
         }
@@ -49,11 +49,13 @@ function Movies(){
         <div>
             <table className="table table-dark">
                 <thead className="bg-dark">
-                    <th>No</th>
-                    <th>judul</th>
-                    <th>Tahun Rilis</th>
-                    <th>Sutradara</th>
-                    <th>aksi</th>
+                    <tr>
+                        <th>No</th>
+                        <th>judul</th>
+                        <th>Tahun Rilis</th>
+                        <th>Sutradara</th>
+                        <th>aksi</th>
+                    </tr>
                 </thead>
                 <tbody>
                     {
@@ -68,7 +70,8 @@ function Movies(){
                                 <td>{movie.judul}</td>
                                 <td>{movie.tahunRilis}</td>
                                 <td>{movie.sutradara}</td>
-                                <td><button className="btn btn-danger" onClick={() => handledelete(movie._id)}>delete</button>
+                                <td>
+                                    <button className="btn btn-danger" onClick={() => handledelete(movie._id)}>delete</button>
                                 </td>
                             </tr>
                         })
