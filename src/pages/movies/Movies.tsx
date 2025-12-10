@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react"
 import { NavLink } from "react-router"
 import ApiClient from "../../utils/ApiClient"
+import { Button } from "react-bootstrap"
 
 interface Movie {
     _id : string,
@@ -71,7 +72,9 @@ function Movies(){
                                 <td>{movie.tahunRilis}</td>
                                 <td>{movie.sutradara}</td>
                                 <td>
-                                    <button className="btn btn-danger" onClick={() => handledelete(movie._id)}>delete</button>
+                                    <NavLink to={`/list-movies/edit-movie/${movie._id}`} className="btn btn-primary">Edit</NavLink>
+                                    <Button variant="danger" onClick={() => handledelete(movie._id)}>delete</Button>
+                                    {/* <button className="btn btn-danger" onClick={() => handledelete(movie._id)}>delete</button> */}
                                 </td>
                             </tr>
                         })

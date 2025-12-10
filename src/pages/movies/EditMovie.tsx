@@ -1,6 +1,6 @@
-import { useState, type ChangeEvent, type FormEvent } from "react"
+import { use, useCallback, useEffect, useState, type ChangeEvent, type FormEvent } from "react"
 import { Button, Form } from "react-bootstrap"
-import { NavLink, useNavigate } from "react-router"
+import { NavLink, useNavigate, useParams } from "react-router"
 import ApiClient from "../../utils/ApiClient"
 
 interface FormMovie{
@@ -9,13 +9,41 @@ interface FormMovie{
     sutradara : string
 }
 
-function AddMovie(){
+interface ResponseData{
+    data : {
+        _id : string,
+        judul : string,
+        tahunRilis : string,
+        sutradara : string,
+        createdBy : string,
+        createdAT : string,
+        updateAt : string,
+        __v : string
+    },
+    message : string
+}
+
+function EditMovie(){
+    const params = useParams();
     const navigate = useNavigate();
     const [form, setForm] = useState<FormMovie>({
         judul : "",
         tahunRilis : "",
         sutradara : ""
     }) 
+
+    const fetchMovie = useCallback(async() => {
+        const response = await ApiClient.get<ResponseData>(`/movies/${params.id}`)
+
+        if(response.status === 200){
+            const responseData: ResponseData = response.data;
+            setForm({
+                judul : responseData.data.judul,
+                tahunRilis : responseData.data.tahunRilis,
+                sutradara : responseData.data.sutradara
+            })
+        }
+    }, [params])
 
     const handleInputChange = (event : ChangeEvent<HTMLInputElement>) => {
         const {name, value} = event.target
@@ -28,19 +56,21 @@ function AddMovie(){
     const handleSubmit = async (event : FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         try{
-            const response = await ApiClient.post("/movies", form)
+            const response = await ApiClient.put(`/movies/${params.id}`, form)
             console.log(response);
-            if(response.status === 201){
-                navigate("/list-movies", {replace : true})
-            }
+            navigate("/list-movies", {replace : true})
         }catch(error){
             console.log(error);
         }
     }
 
+    useEffect(() => {
+        fetchMovie()
+    }, [fetchMovie])
+
     return <div className="container mx-auto">
         <div className="d-flex justify-content-between mb-3">
-            <h2>Add Movie Page</h2>
+            <h2>Edit Movie Page</h2>
             <NavLink to="/list-movies" className= "btn btn-primary">movie</NavLink>
         </div>
         <div>
@@ -68,4 +98,4 @@ function AddMovie(){
     </div>
 }
 
-export default AddMovie
+export default EditMovie
